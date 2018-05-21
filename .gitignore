@@ -43,6 +43,9 @@ tmp/
 .vscode
 .DS_Store
 
+# IntelliJ
+.idea/
+
 # PyTest
 .cache/
 

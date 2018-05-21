@@ -6,11 +6,13 @@ from aztk import error
 from aztk.utils import constants, helpers
 
 class SparkToolkit(aztk.models.Toolkit):
-    def __init__(self, version: str, environment: str = None, environment_version: str = None):
+    def __init__(self, version: str, environment: str = None, environment_version: str = None, docker_repo: str = None):
         super().__init__(
+            software="spark",
             version=version,
             environment=environment,
             environment_version=environment_version,
+            docker_repo=docker_repo
         )
 
 
@@ -141,6 +143,7 @@ class ApplicationConfiguration:
             name=None,
             application=None,
             application_args=None,
+            depends_on=None,
             main_class=None,
             jars=None,
             py_files=None,
@@ -156,6 +159,7 @@ class ApplicationConfiguration:
         self.name = name
         self.application = application
         self.application_args = application_args
+        self.depends_on = depends_on
         self.main_class = main_class
         self.jars = jars or []
         self.py_files = py_files or []
@@ -214,7 +218,8 @@ class JobConfiguration:
             max_dedicated_nodes=0,
             max_low_pri_nodes=0,
             subnet_id=None,
-            worker_on_master=None):
+            worker_on_master=None,
+            schedule=None):
         self.id = id
         self.applications = applications
         self.custom_scripts = custom_scripts
@@ -226,6 +231,7 @@ class JobConfiguration:
         self.max_low_pri_nodes = max_low_pri_nodes
         self.subnet_id = subnet_id
         self.worker_on_master = worker_on_master
+        self.schedule = schedule
 
     def to_cluster_config(self):
         return ClusterConfiguration(

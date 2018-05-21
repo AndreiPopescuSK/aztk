@@ -119,6 +119,7 @@ class Client:
         # Create job
         job = batch_models.JobAddParameter(
             id=job_id,
+            uses_task_dependencies=True,
             pool_info=batch_models.PoolInformation(pool_id=pool_id))
 
         # Add job to batch
@@ -335,6 +336,7 @@ class Client:
             display_name=job_configuration.id,
             on_all_tasks_complete=batch_models.OnAllTasksComplete.terminate_job,
             job_manager_task=job_manager_task,
+            uses_task_dependencies=True,
             metadata=[
                 batch_models.MetadataItem(
                     name='applications', value=application_metadata)
@@ -343,10 +345,10 @@ class Client:
 
         # define schedule
         schedule = batch_models.Schedule(
-            do_not_run_until=None,
-            do_not_run_after=None,
-            start_window=None,
-            recurrence_interval=None
+            do_not_run_until=job_configuration.schedule.get("do_not_run_until", None),
+            do_not_run_after=job_configuration.schedule.get("do_not_run_after", None),
+            start_window=job_configuration.schedule.get("start_window", None),
+            recurrence_interval=job_configuration.schedule.get("recurrence_interval", None)
         )
 
         # create job schedule and add task

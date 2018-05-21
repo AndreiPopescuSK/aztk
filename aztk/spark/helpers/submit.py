@@ -94,6 +94,7 @@ def generate_task(spark_client, container_id, application):
         resource_files=resource_files,
         constraints=batch_models.TaskConstraints(
             max_task_retry_count=application.max_retry_count),
+        depends_on=batch_models.TaskDependencies(application.depends_on),
         user_identity=batch_models.UserIdentity(
             auto_user=batch_models.AutoUserSpecification(
                 scope=batch_models.AutoUserScope.task,
